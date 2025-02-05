@@ -23,16 +23,22 @@ int testnum = 1;
 //	"which" is simply a number identifying the thread, for debugging
 //	purposes.
 //----------------------------------------------------------------------
-
-void
-SimpleThread(int which)
+int SharedVariable;
+void SimpleThread(int which)
 {
-    int num;
-    
-    for (num = 0; num < 5; num++) {
-	printf("*** thread %d looped %d times\n", which, num);
+    int num, val;
+    for (num = 0; num < 5; num++) 
+    {
+        val = SharedVariable;    
+	    printf("*** thread %d looped %d times\n", which, num);
+        currentThread->Yield();
+        
+        SharedVariable = val+1;
         currentThread->Yield();
     }
+
+    val = SharedVariable;
+    printf("Thread %d sees final value %d\n", which, val);
 }
 
 //----------------------------------------------------------------------
