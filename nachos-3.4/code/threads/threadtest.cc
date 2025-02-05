@@ -23,6 +23,7 @@ int testnum = 1;
 //	"which" is simply a number identifying the thread, for debugging
 //	purposes.
 //----------------------------------------------------------------------
+#if defined(CHANGED) && defined(THREADS)
 int SharedVariable;
 void SimpleThread(int which)
 {
@@ -41,12 +42,24 @@ void SimpleThread(int which)
     printf("Thread %d sees final value %d\n", which, val);
 }
 
+
+#else
+void
+SimpleThread(int which)
+{
+    int num;
+    
+    for (num = 0; num < 5; num++) {
+	printf("*** thread %d looped %d times\n", which, num);
+        currentThread->Yield();
+    }
+}
 //----------------------------------------------------------------------
 // ThreadTest1
 // 	Set up a ping-pong between two threads, by forking a thread 
 //	to call SimpleThread, and then calling SimpleThread ourselves.
 //----------------------------------------------------------------------
-
+#endif
 void
 ThreadTest1()
 {
